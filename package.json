@@ -11,10 +11,12 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+ {
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "multer": "^2.0.2",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "nodemailer": "^6.9.0"
   }
 }
