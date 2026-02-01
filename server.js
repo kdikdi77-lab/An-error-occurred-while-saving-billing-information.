@@ -8,10 +8,10 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// --- 設定區：請修改以下資訊 ---
-const MY_GMAIL = '7658856@gmail.com'; // 你的 Gmail
-const MY_APP_PASSWORD = 'xxxx xxxx xxxx xxxx'; // 你申請到的 16 位應用程式密碼
-// --------------------------
+// --- 設定區：請填入你的 16 位密碼 ---
+const MY_GMAIL = '7658856@gmail.com'; 
+const MY_APP_PASSWORD = 'svmq lkzk qrtu oqvg'; // 👈 記得把這行換成你剛申請的密碼
+// ------------------------------
 
 app.use(cors());
 app.use(express.json());
@@ -23,20 +23,19 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-// Multer 設定：存放在伺服器的臨時位置
+// Multer 設定
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
 const upload = multer({ storage: storage });
 
-// 1. 讓網頁讀取價格表 (讀取同資料夾下的 prices.json)
+// 1. 讓網頁讀取價格表
 app.get('/prices', (req, res) => {
   const pricePath = path.join(__dirname, 'prices.json');
   if (fs.existsSync(pricePath)) {
     res.sendFile(pricePath);
   } else {
-    // 如果檔案不存在，回傳預設值以免網頁當掉
     res.json([{ "name": "4x6", "basePrice": 6, "limit1": 0, "special1": 6, "limit2": 0, "special2": 6 }]);
   }
 });
@@ -49,7 +48,6 @@ app.post('/upload', upload.array('photos'), async (req, res) => {
 
     console.log(`收到訂單：${phone}, 共 ${count} 張`);
 
-    // 設定寄信程式
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -58,7 +56,6 @@ app.post('/upload', upload.array('photos'), async (req, res) => {
       }
     });
 
-    // 設定信件內容
     const mailOptions = {
       from: `"明影線上沖印" <${MY_GMAIL}>`,
       to: MY_GMAIL, 
@@ -70,13 +67,14 @@ app.post('/upload', upload.array('photos'), async (req, res) => {
       }))
     };
 
-    // 執行寄信
     await transporter.sendMail(mailOptions);
 
-    // 寄完信後，刪除伺服器上的臨時照片以節省空間
-    files.forEach(file => fs.unlinkSync(file.path));
+    // 寄完信後清理伺服器暫存檔
+    files.forEach(file => {
+      if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+    });
 
-    res.status(200).send('Order processed and email sent.');
+    res.status(200).send('OK');
   } catch (error) {
     console.error('處理訂單失敗:', error);
     res.status(500).send('Server Error');
