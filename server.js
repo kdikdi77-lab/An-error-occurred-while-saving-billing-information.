@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // --- 設定區：請填入你的 16 位密碼 ---
-const MY_GMAIL = 'kdikdi77@gmail.com'; 
+const MY_GMAIL = '7658856@gmail.com'; 
 const MY_APP_PASSWORD = 'svmq lkzk qrtu oqvg'; // 👈 記得把這行換成你剛申請的密碼
 // ------------------------------
 
@@ -84,4 +84,5 @@ app.post('/upload', upload.array('photos'), async (req, res) => {
 app.listen(port, () => {
   console.log(`伺服器運行中：http://localhost:${port}`);
 });
+
 
