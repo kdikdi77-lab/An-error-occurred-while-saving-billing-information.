@@ -1,0 +1,23 @@
+[
+    {
+        "name": "4x6 一般",
+        "unit": "張",
+        "basePrice": 5,
+        "bulkThreshold": 50,
+        "bulkPrice": 4
+    },
+    {
+        "name": "2x3 護貝",
+        "unit": "張",
+        "basePrice": 10,
+        "bulkThreshold": 20,
+        "bulkPrice": 8
+    },
+    {
+        "name": "A4 大圖",
+        "unit": "張",
+        "basePrice": 100,
+        "bulkThreshold": 5,
+        "bulkPrice": 80
+    }
+]
